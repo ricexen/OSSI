@@ -109,15 +109,15 @@ class Terminal:
   def color(self, message_type):
     color = ''
     if(message_type == Terminal.MessageType.ERROR):
-      color = Terminal.Color.RED
+      color = Terminal.Color.BRED
     elif(message_type == Terminal.MessageType.INFO):
       color = Terminal.Color.CYAN
     elif(message_type == Terminal.MessageType.WARNING):
-      color = Terminal.Color.YELLOW
+      color = Terminal.Color.BYELLOW
     elif(message_type == Terminal.MessageType.SUCCESS):
-      color = Terminal.Color.GREEN
+      color = Terminal.Color.BGREEN
     elif(message_type == Terminal.MessageType.LOG):
-      color = Terminal.Color.WHITE
+      color = Terminal.Color.COLOR_OFF
     return color
 
   class MessageType(Enum):
