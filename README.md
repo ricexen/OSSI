@@ -23,8 +23,8 @@ $ cd OSSI
 
 # Setup
 ```
-$ pip2 install -r requirements.txt
-$ pip3 install -e git+https://github.com/mobolic/facebook-sdk.git#egg=facebook-sdk
+$ pip install -r requirements.txt
+$ pip install -e git+https://github.com/mobolic/facebook-sdk.git#egg=facebook-sdk
 ```
 # Running
 ```
