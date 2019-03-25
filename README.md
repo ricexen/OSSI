@@ -2,35 +2,36 @@
 # this project will be stopped for some time to come.
 
 ```
-                                          _     _
-                                        o' \.=./ `o
-                                           (o o)          
-                                       ooO--(_)--Ooo
-                                       
-                                          O S I F
-                            [open source information facebook]
+                                          _.---._    /\\  
+                                       ./'       "--`\//  
+                                    ./              o \  
+                                    /./\  )______   \__ \ 
+                                    ./  / /\ \   | \ \  \ \
+                                       / /  \ \  | |\ \  \7
+                                       "     "    "  "    
+
+                                          O S S I        
+                            [Open Source Social information]
 ```
-OSIF is an accurate facebook account information gathering, all sensitive information can be easily gathered even though the target converts all of its privacy to (only me), Sensitive information about residence, date of birth, occupation, phone number and email address.
+OSSI is an accurate social networks account information gathering. You can retrive information like phone, email, connections between them, etc. This project is based in [CiKu370/OSIF](https://github.com/CiKu370/OSIF) project.
 
-
-
-# [ Installation ]
+# Installation
 ```
-$ pkg update upgrade
-$ pkg install git python2
-$ git clone https://github.com/ciku370/OSIF
-$ cd OSIF
+$ git clone https://github.com/xentyo/OSIF OSSI
+$ git clone https://github.com/xentyo/OSIF OSSI
+$ cd OSSI
 ```
 
-# [ Setup ]
+# Setup
 ```
 $ pip2 install -r requirements.txt
+$ pip3 install -e git+https://github.com/mobolic/facebook-sdk.git#egg=facebook-sdk
 ```
-# [ Running ]
+# Running
 ```
-$ python2 osif.py
+$ python2 ossi.py
 ```
-# [ Screenshot ]
+# Preview
 <img src=".images/osif.png "/>
 
 * if you are confused how to use it, please type 'help' to display the help menu
