@@ -18,7 +18,6 @@ OSSI is an accurate social networks account information gathering. You can retri
 # Installation
 ```
 $ git clone https://github.com/xentyo/OSIF OSSI
-$ git clone https://github.com/xentyo/OSIF OSSI
 $ cd OSSI
 ```
 
@@ -32,7 +31,7 @@ $ pip3 install -e git+https://github.com/mobolic/facebook-sdk.git#egg=facebook-s
 $ python2 ossi.py
 ```
 # Preview
-<img src=".images/osif.png "/>
+<img src=".images/ossi.png "/>
 
 * if you are confused how to use it, please type 'help' to display the help menu
 * [Warn] please turn off your VPN before using this program !!!
