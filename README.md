@@ -1,5 +1,5 @@
 
-# this project will be stopped for some time to come.
+# OSSI - Open Source Social information
 
 ```
                                           _.---._    /\\  
@@ -11,7 +11,7 @@
                                        "     "    "  "    
 
                                           O S S I        
-                            [Open Source Social information]
+                            [Open Source Social Information]
 ```
 OSSI is an accurate social networks account information gathering. You can retrive information like phone, email, connections between them, etc. This project is based in [CiKu370/OSIF](https://github.com/CiKu370/OSIF) project.
 
