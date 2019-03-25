@@ -1,6 +1,10 @@
 import os
+import sys
 from src.util import write_directory, join_path
 from src.terminal import Terminal
+
+if sys.version_info[0] < 3:
+    raise Exception("Python 3 or a more recent version is required.")
 
 user_request_exit = False
 
