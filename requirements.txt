@@ -1,6 +1,4 @@
 requests
 readline
-enum
 simplejson
 progress
-# facebook git+https://github.com/mobolic/facebook-sdk.git#egg=facebook-sdk

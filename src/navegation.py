@@ -15,7 +15,7 @@ NAVEGATION_MENU_CONFIG = [
   {
     'title': 'Fetch Data',
     'commands': [
-      {'fetch:friends': ['Fetch all id from friend list', fetch_friends, True]},
+      {'fetch:friends': ['Fetch all friends <id, name>', fetch_friends, True]},
       {'fetch:ids': ['Fetch all id from friend list', fetch_ids, True]},
       {'fetch:phones': ['Fetch all phone number from friend list', fetch_phones, True]},
       {'fetch:emails': ['Fetch all emails from friend list', fetch_emails, True]},
