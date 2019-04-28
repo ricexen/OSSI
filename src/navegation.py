@@ -2,7 +2,7 @@ from src.terminal import Terminal, CommandNotFoundException
 from src.actions.auth import token
 from src.actions.terminal import clear, about, exit_action
 from src.actions.fetch import fetch_all, fetch_emails, fetch_knowns, fetch_ids, fetch_phones, fetch_photos
-from src.actions.investigation import find_knowns_of, find_knowns_of_my_knowns, get_connections
+from src.actions.investigation import find_knowns_of, find_knowns_of_my_knowns, my_connections
 from definitions import terminal, user_request_exit
 
 NAVEGATION_MENU_CONFIG = [
@@ -36,7 +36,7 @@ NAVEGATION_MENU_CONFIG = [
             {'invest:knowns-of-all': ['Fetch all id from known list',
                                       find_knowns_of_my_knowns, True]},
             {'invest:connect': [
-                'Fetch all id from known list', get_connections, True]},
+                'Fetch all id from known list', my_connections, True]},
         ]
     },
     {

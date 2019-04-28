@@ -115,7 +115,7 @@ def get_known_connections(person, connections=[]):
     return connections
 
 
-def get_connections(terminal: Terminal):
+def people_connections(terminal: Terminal):
     people_file = '%s/people.csv' % OUTPUT_CSVS_DIR
     connections = []
     people = []
@@ -135,6 +135,11 @@ def get_connections(terminal: Terminal):
         person.get_knowns(0)
         for con in get_known_connections(person):
             connections.append(con)
+
+
+def my_connections(terminal: Terminal):
+    me = Person(id='me')
+    me.get_knowns(2, True)
 
 
 def genderify_photos(terminal):
