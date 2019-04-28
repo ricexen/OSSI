@@ -23,11 +23,16 @@ class Person:
             knowns = facebook_api.get_knowns_of(self.id)
         for known in knowns:
             person = Person(id=known['id'], name=known['name'])
-            self.connections.append({
+            con = {
                 'source': self.id,
                 'target': known['id']
-            })
+            }
+            self.connections.append(con)
             self.knowns.append(person)
+        connections_file = '%s/people_connections.csv' % OUTPUT_CSVS_DIR
+        fields = ['source', 'target']
+        save_list_of_dicts(connections_file, self.connections, fields)
+
         if (depth > 0):
             for known in self.knowns:
                 known.get_knowns(depth - 1, reverse)
@@ -112,7 +117,6 @@ def get_known_connections(person, connections=[]):
 
 def get_connections(terminal: Terminal):
     people_file = '%s/people.csv' % OUTPUT_CSVS_DIR
-    connections_file = '%s/people_connections.csv' % OUTPUT_CSVS_DIR
     connections = []
     people = []
     persons = []
@@ -131,7 +135,6 @@ def get_connections(terminal: Terminal):
         person.get_knowns(0)
         for con in get_known_connections(person):
             connections.append(con)
-    save_list_of_dicts(connections_file, connections, ['source', 'target'])
 
 
 def genderify_photos(terminal):

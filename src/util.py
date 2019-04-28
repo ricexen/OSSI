@@ -57,9 +57,14 @@ def to_dict(obj, classkey=None):
 
 
 def save_list_of_dicts(file_name: str, l: list, fields: list):
-    with open(file_name, 'w') as f:
+    exists = os.path.exists(file_name)
+    mode = 'w+'
+    if exists:
+        mode = 'a'
+    with open(file_name, mode) as f:
         writer = csv.DictWriter(f, fieldnames=fields)
-        writer.writeheader()
+        if not exists:
+            writer.writeheader()
         progress_bar = ProgressBar('Saving %s' %
                                    relative_path(file_name), max=len(l))
         for el in l:
