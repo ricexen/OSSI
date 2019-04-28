@@ -7,6 +7,8 @@ define_directories()
 
 pp = pprint.PrettyPrinter()
 me = Person('me')
+me.load_knowns(depth=0)
+me.save_connections()
 
 pp.pprint(me.__dict__)
 

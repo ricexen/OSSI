@@ -1,10 +1,13 @@
 import os
 import csv
+from numpy import unique
 from progress.bar import Bar as ProgressBar
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 PHOTOS_DIR = os.path.join(ROOT_DIR, 'output/photos')
 OUTPUT_CSVS_DIR = os.path.join(ROOT_DIR, 'output/csv')
+
+unique = unique
 
 
 def write_directory(path):
@@ -65,18 +68,23 @@ def save_list_of_dicts(file_name: str, l: list, fields: list):
         writer = csv.DictWriter(f, fieldnames=fields)
         if not exists:
             writer.writeheader()
-        progress_bar = ProgressBar('Saving %s' %
-                                   relative_path(file_name), max=len(l))
+        bar_message = 'Saving %s' % relative_path(file_name)
+        progress_bar = ProgressBar(bar_message, max=len(l))
         for el in l:
             row = {}
             for field in fields:
                 try:
-                    row[field] = el[field]
+                    row[field] = el.get(field, None)
                 except KeyError as ex:
                     raise ex
             if row.keys():
                 writer.writerow(row)
             progress_bar.next()
-        f.close()
+    f.close()
     print()
     return f
+
+
+def diff(first, second):
+    second = set(second)
+    return [item for item in first if item not in second]
