@@ -1,7 +1,10 @@
 import time
+from colorama import init, Fore, Back, Style
 from src.api import Facebook
 from gephistreamer import graph, streamer
 from src.models import FBPerson
+
+init()
 
 fb_api = Facebook()
 ws = streamer.GephiWS(workspace='facebook')
@@ -37,4 +40,4 @@ def new_known(source, target):
 stream.add_node(node_me)
 me.load_knowns(depth=1, on_known_loaded=new_known)
 
-time.sleep(100000)
+print('finish!')

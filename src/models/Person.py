@@ -1,5 +1,6 @@
+import numpy as np
 from src.api import Facebook
-from src.util import save_list_of_dicts
+from src.util import save_list_of_dicts, intersection
 from definitions import OUTPUT_CSVS_DIR
 
 people_file = '%s/people.csv' % OUTPUT_CSVS_DIR
@@ -7,39 +8,35 @@ people_connections_file = '%s/people_connections.csv' % OUTPUT_CSVS_DIR
 
 fb_api = Facebook()
 
-
 class Person:
     def __init__(self, id=None, name=None, load_information=True, load_photo=True):
         self.profile = {}
         self.name = {'full': name}
         self.id = id
+        self.knowns = []
         if self.id and load_information:
             self.load_profile()
         if self.id and load_photo:
             self.load_photo()
 
     def load_knowns(self, depth=0, reverse=False, origin=None, on_known_loaded=lambda source, target: [source, target]):
+        knowns_raw = []
         if not origin:
-            origin = self.id
+            origin = self
         if self.id:
-            for known_raw in fb_api.get_knowns_of(self.id):
-                id = known_raw.get('id', None)
-                name = known_raw.get('name', None)
-                known = Person(id, name, load_information=False,
-                               load_photo=False)
-                connection = {
-                    'source': self.id,
-                    'target': known.id
-                }
-                self.connections.append(connection)
-                self.knowns.append(known)
-        for index, known in enumerate(self.knowns):
-            id = known.id
-            k = self.knowns[index] = Person(id=id, load_photo=False)
+            knowns_raw = fb_api.get_knowns_of(self.id, loading=True)
+        for known_raw in knowns_raw:
+            id = known_raw.get('id', None)
+            name = known_raw.get('name', None)
+            known = Person(id, name, False, False)
+            self.knowns.append(known)
+            remove_not_common_knowns(origin, self)
             on_known_loaded(self, known)
-        if depth > 0:
-            for k in self.knowns:
-                k.load_knowns(depth=depth - 1)
+        for index, known in enumerate(self.knowns):
+            if depth > 0:
+                k = self.knowns[index] = Person(known.id,known.name['full'], False, False)
+                k.load_knowns(depth=depth - 1, origin=origin, on_known_loaded=on_known_loaded)
+
 
     def has_knowns(self):
         return self.knowns and len(self.knowns)
@@ -72,7 +69,7 @@ class Person:
             'birthday': d.get('birthday', 'N/A'),
             'email': d.get('email', 'N/A'),
             'gender': d.get('gender', 'N/A'),
-            'photo': d.get('photo', 'N/A'),
+            'image': d.get('photo', 'N/A'),
         }
         return data
 
@@ -84,3 +81,13 @@ class Person:
     def save_connections(self):
         fields = ['source', 'target']
         save_list_of_dicts(people_connections_file, self.connections, fields)
+
+def remove_not_common_knowns(origin, target):
+    target_dicts = [p.__dict__ for p in target.knowns]
+    origin_dicts = [p.__dict__ for p in origin.knowns]
+    ids_target = [d['id'] for d in target_dicts]
+    ids_origin =[d['id'] for d in origin_dicts]
+    inner = intersection(ids_target, ids_origin)
+    for k in target.knowns:
+        if not k.id in inner:
+            target.knowns.remove(k)
