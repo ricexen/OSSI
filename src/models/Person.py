@@ -14,26 +14,11 @@ class Person:
         self.name = {'full': name}
         self.id = id
         if self.id and load_information:
-            self.profile = fb_api.get_profile_data(self.id)
-            self.id = self.profile.get('id', None)
-            self.email = self.profile.get('email', None)
-            self.gender = self.profile.get('gender', None)
-            self.birthday = self.profile.get('birthday', None)
-            self.name = {
-                'first': self.profile.get('first_name', ''),
-                'last': self.profile.get('last_name', ''),
-                'user': self.profile.get('username', None)
-            }
-            fullname = '%s %s' % (self.name['first'], self.name['last'])
-            self.name['full'] = fullname.strip()
-            self.knowns = []
-            self.connections = []
-            self.photo = None
+            self.load_profile()
         if self.id and load_photo:
             self.load_photo()
-        self.save()
 
-    def load_knowns(self, depth=0, reverse=False, origin=None):
+    def load_knowns(self, depth=0, reverse=False, origin=None, on_known_loaded=lambda source, target: [source, target]):
         if not origin:
             origin = self.id
         if self.id:
@@ -48,28 +33,51 @@ class Person:
                 }
                 self.connections.append(connection)
                 self.knowns.append(known)
+        for index, known in enumerate(self.knowns):
+            id = known.id
+            k = self.knowns[index] = Person(id=id, load_photo=False)
+            on_known_loaded(self, known)
         if depth > 0:
-            for index, known in enumerate(self.knowns):
-                id = known.id
-                k = self.knowns[index] = Person(id=id, load_photo=False)
+            for k in self.knowns:
                 k.load_knowns(depth=depth - 1)
 
     def has_knowns(self):
         return self.knowns and len(self.knowns)
 
+    def load_profile(self):
+        self.profile = fb_api.get_profile_data(self.id)
+        self.id = self.profile.get('id', None)
+        self.email = self.profile.get('email', None)
+        self.gender = self.profile.get('gender', None)
+        self.birthday = self.profile.get('birthday', None)
+        self.name = {
+            'first': self.profile.get('first_name', ''),
+            'last': self.profile.get('last_name', ''),
+            'user': self.profile.get('username', None)
+        }
+        fullname = '%s %s' % (self.name['first'], self.name['last'])
+        self.name['full'] = fullname.strip()
+        self.knowns = []
+        self.connections = []
+        self.photo = None
+
     def load_photo(self):
         self.photo = fb_api.get_profile_picture(self.id).name
 
-    def save(self):
+    def row_data(self):
         d = self.__dict__
         data = {
             'name': d['name']['full'],
             'id': d['id'],
-            'birthday': d.get('birthday', None),
-            'email': d.get('email', None),
-            'gender': d.get('gender', None),
-            'photo': d.get('photo', None),
+            'birthday': d.get('birthday', 'N/A'),
+            'email': d.get('email', 'N/A'),
+            'gender': d.get('gender', 'N/A'),
+            'photo': d.get('photo', 'N/A'),
         }
+        return data
+
+    def save(self):
+        data = self.row_data()
         fields = list(data)
         save_list_of_dicts(people_file, [data], fields)
 

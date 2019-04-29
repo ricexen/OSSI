@@ -13,7 +13,8 @@ from src.terminal import Terminal
 from progress.spinner import Spinner
 from facebook import GraphAPI as FacebookAPI
 
-BASE_URL = 'https://graph.facebook.com/v3.2'
+BASE_VERSION = '3.1'
+BASE_URL = 'https://graph.facebook.com/v%s' % BASE_VERSION
 BASE_ME = BASE_URL + '/me'
 LOGIN_ENPOINT = 'https://api.facebook.com/restserver.php'
 
@@ -112,13 +113,15 @@ class Facebook:
         return open(PATH_COOKIE_ACCESS_TOKEN, 'r').read()
 
     def get_knowns(self, loading=True):
-        fb = FacebookAPI(access_token=self.access_token(), version='3.2')
+        fb = FacebookAPI(access_token=self.access_token(),
+                         version=BASE_VERSION)
         response = fb.get_connections(id='me', connection_name='friends')
         knowns = self.fetch_paginated(response, loading)
         return knowns
 
     def get_profile_data(self, profile_id):
-        fb = FacebookAPI(access_token=self.access_token(), version='3.2')
+        fb = FacebookAPI(access_token=self.access_token(),
+                         version=BASE_VERSION)
         profile = fb.request(profile_id)
         return profile
 
@@ -138,7 +141,8 @@ class Facebook:
         return known.get('username', None)
 
     def get_knowns_of(self, profile_id: str, loading=False):
-        fb = FacebookAPI(access_token=self.access_token(), version='3.2')
+        fb = FacebookAPI(access_token=self.access_token(),
+                         version=BASE_VERSION)
         response = fb.get_connections(profile_id, connection_name='friends')
         knowns = self.fetch_paginated(response, loading)
         return knowns
