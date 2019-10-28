@@ -13,9 +13,14 @@ from src.terminal import Terminal
 from progress.spinner import Spinner
 from facebook import GraphAPI as FacebookAPI
 
+<< << << < HEAD
 API_VERSION = '3.1'
 
 BASE_URL = 'https://graph.facebook.com/v{}'.format(API_VERSION)
+== == == =
+VERSION = '3.1'
+BASE_URL = 'https://graph.facebook.com/v'+VERSION
+>>>>>> > master
 BASE_ME = BASE_URL + '/me'
 LOGIN_ENPOINT = 'https://api.facebook.com/restserver.php'
 
@@ -44,7 +49,11 @@ BASE_SIGNATURE = 'api_key={0}credentials_type=passwordemail={1}format=JSONgenera
 
 class Request:
     @staticmethod
+<< << << < HEAD
     def get(url):
+== == == =
+    def get(url) -> dict:
+>>>>>> > master
         response = requests.get(url)
         text = response.text
         # enable if you are going to examine the data that comes from requests
