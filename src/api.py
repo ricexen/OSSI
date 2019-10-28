@@ -13,8 +13,14 @@ from src.terminal import Terminal
 from progress.spinner import Spinner
 from facebook import GraphAPI as FacebookAPI
 
+<< << << < HEAD
+API_VERSION = '3.1'
+
+BASE_URL = 'https://graph.facebook.com/v{}'.format(API_VERSION)
+== == == =
 VERSION = '3.1'
 BASE_URL = 'https://graph.facebook.com/v'+VERSION
+>>>>>> > master
 BASE_ME = BASE_URL + '/me'
 LOGIN_ENPOINT = 'https://api.facebook.com/restserver.php'
 
@@ -43,7 +49,11 @@ BASE_SIGNATURE = 'api_key={0}credentials_type=passwordemail={1}format=JSONgenera
 
 class Request:
     @staticmethod
+<< << << < HEAD
+    def get(url):
+== == == =
     def get(url) -> dict:
+>>>>>> > master
         response = requests.get(url)
         text = response.text
         # enable if you are going to examine the data that comes from requests
@@ -112,14 +122,14 @@ class Facebook:
     def access_token(self):
         return open(PATH_COOKIE_ACCESS_TOKEN, 'r').read()
 
-    def get_friends(self):
-        fb = FacebookAPI(access_token=self.access_token(), version=VERSION)
+    def get_knowns(self, loading=True):
+        fb = FacebookAPI(access_token=self.access_token(), version=API_VERSION)
         response = fb.get_connections(id='me', connection_name='friends')
-        friends = self.fetch_paginated(response)
-        return friends
+        knowns = self.fetch_paginated(response, loading)
+        return knowns
 
-    def get_profile_data(self, profile_id) -> dict:
-        fb = FacebookAPI(access_token=self.access_token(), version=VERSION)
+    def get_profile_data(self, profile_id):
+        fb = FacebookAPI(access_token=self.access_token(), version=API_VERSION)
         profile = fb.request(profile_id)
         return profile
 
@@ -134,24 +144,26 @@ class Facebook:
         picture = write_photo('%s.jpg' % profile_id, contents)
         return picture
 
-    def get_username(self, profile_id: str) -> str:
-        friend = self.get_profile_data(profile_id)
-        return friend.get('username', None)
+    def get_username(self, profile_id: str):
+        known = self.get_profile_data(profile_id)
+        return known.get('username', None)
 
-    def get_friends_of(self, profile_id: str):
-        fb = FacebookAPI(access_token=self.access_token(), version=VERSION)
-        username = self.get_username(profile_id)
-        response = fb.get_connections(username, connection_name='friends')
-        friends = self.fetch_paginated(response)
-        return friends
+    def get_knowns_of(self, profile_id: str, loading=False):
+        fb = FacebookAPI(access_token=self.access_token(), version=API_VERSION)
+        response = fb.get_connections(profile_id, connection_name='friends')
+        knowns = self.fetch_paginated(response, loading)
+        return knowns
 
-    def fetch_paginated(self, response: dict, getter: str = 'data') -> list:
+    def fetch_paginated(self, response: dict, loading=False, getter: str = 'data'):
         objects = []
-        loading_bar = Spinner('Getting data from %s' % BASE_URL)
+        loading_bar = None
+        if loading:
+            loading_bar = Spinner('Getting data from %s' % BASE_URL)
         next_page = url = None
         while True:
             objects = objects + response[getter]
-            loading_bar.next()
+            if loading:
+                loading_bar.next()
             paging = response.get('paging', None)
             if paging:
                 next_page = paging.get('next', None)
