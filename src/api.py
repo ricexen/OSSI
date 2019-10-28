@@ -13,14 +13,8 @@ from src.terminal import Terminal
 from progress.spinner import Spinner
 from facebook import GraphAPI as FacebookAPI
 
-<< << << < HEAD
 API_VERSION = '3.1'
-
 BASE_URL = 'https://graph.facebook.com/v{}'.format(API_VERSION)
-== == == =
-VERSION = '3.1'
-BASE_URL = 'https://graph.facebook.com/v'+VERSION
->>>>>> > master
 BASE_ME = BASE_URL + '/me'
 LOGIN_ENPOINT = 'https://api.facebook.com/restserver.php'
 
