@@ -49,11 +49,7 @@ BASE_SIGNATURE = 'api_key={0}credentials_type=passwordemail={1}format=JSONgenera
 
 class Request:
     @staticmethod
-<< << << < HEAD
     def get(url):
-== == == =
-    def get(url) -> dict:
->>>>>> > master
         response = requests.get(url)
         text = response.text
         # enable if you are going to examine the data that comes from requests
